@@ -1,0 +1,476 @@
+1- select first_name, last_name, max(salary) from employees;
++------------+-----------+-------------+
+| first_name | last_name | max(salary) |
++------------+-----------+-------------+
+| Steven     | King      |    24000.00 |
++------------+-----------+-------------+
+
+2- MariaDB [hr]> select first_name, last_name, salary from employees order by salary DESC limit 1,1;
++------------+-----------+----------+
+| first_name | last_name | salary   |
++------------+-----------+----------+
+| Lex        | De Haan   | 17000.00 |
++------------+-----------+----------+
+
+OR
+
+select first_name, last_name, max(salary) from employees where salary< (select max(salary) from employees);
++------------+-----------+-------------+
+| first_name | last_name | max(salary) |
++------------+-----------+-------------+
+| Neena      | Kochhar   |    17000.00 |
++------------+-----------+-------------+
+
+
+OR
+
+select first_name, last_name, max(salary) as salary from employees where salary not in(select max(salary) from employees);
++------------+-----------+----------+
+| first_name | last_name | salary   |
++------------+-----------+----------+
+| Neena      | Kochhar   | 17000.00 |
++------------+-----------+----------+
+
+
+3- select first_name,last_name, max(salary) from employees where salary< (select max(salary) from employees where salary< (select max(salary) from employees) );
++------------+-----------+-------------+
+| first_name | last_name | max(salary) |
++------------+-----------+-------------+
+| Alexander  | Hunold    |    14000.00 |
++------------+-----------+-------------+
+
+OR
+
+MariaDB [hr]> select first_name, last_name, salary from employees order by salary DESC limit 3,1;
++------------+-----------+----------+
+| first_name | last_name | salary   |
++------------+-----------+----------+
+| John       | Russell   | 14000.00 |
++------------+-----------+----------+
+
+4- select employee_id, first_name, phone_number, job_id, salary from employees where job_id like "%clerk" order by salary desc limit 1;
++-------------+------------+--------------+----------+---------+
+| employee_id | first_name | phone_number | job_id   | salary  |
++-------------+------------+--------------+----------+---------+
+|         184 | Nandita    | 650.509.1876 | SH_CLERK | 4200.00 |
++-------------+------------+--------------+----------+---------+
+
+OR
+
+select employee_id, first_name, last_name, job_id, salary from employees where (salary) = (select max(salary) from employees where job_id like "%clerk") AND job_id like "%clerk";
++-------------+------------+-----------+----------+---------+
+| employee_id | first_name | last_name | job_id   | salary  |
++-------------+------------+-----------+----------+---------+
+|         184 | Nandita    | Sarchand  | SH_CLERK | 4200.00 |
++-------------+------------+-----------+----------+---------+
+
+5- select first_name, last_name, job_id, salary from employees where job_id like "%account" AND salary > (select max(salary) from employees where job_id like "%clerk") ;
++-------------+-----------+------------+---------+
+| first_name  | last_name | job_id     | salary  |
++-------------+-----------+------------+---------+
+| Daniel      | Faviet    | FI_ACCOUNT | 9000.00 |
+| John        | Chen      | FI_ACCOUNT | 8200.00 |
+| Ismael      | Sciarra   | FI_ACCOUNT | 7700.00 |
+| Jose Manuel | Urman     | FI_ACCOUNT | 7800.00 |
+| Luis        | Popp      | FI_ACCOUNT | 6900.00 |
+| William     | Gietz     | AC_ACCOUNT | 8300.00 |
++-------------+-----------+------------+---------+
+
+6- select first_name, last_name, job_id, salary from employees where job_id like "%clerk" AND salary > (select min(salary) from employees where job_id like "%prog") ;
+Empty set (0.001 sec)
+
+7- select first_name, last_name, salary from employees where salary > (select max(salary) from employees where first_name = "Peter") OR first_name = "Lisa";
++------------+-----------+----------+
+| first_name | last_name | salary   |
++------------+-----------+----------+
+| Steven     | King      | 24000.00 |
+| Neena      | Kochhar   | 17000.00 |
+| Lex        | De Haan   | 17000.00 |
+| Nancy      | Greenberg | 12000.00 |
+| Den        | Raphaely  | 11000.00 |
+| John       | Russell   | 14000.00 |
+| Karen      | Partners  | 13500.00 |
+| Alberto    | Errazuriz | 12000.00 |
+| Gerald     | Cambrault | 11000.00 |
+| Eleni      | Zlotkey   | 10500.00 |
+| Clara      | Vishney   | 10500.00 |
+| Lisa       | Ozer      | 11500.00 |
+| Ellen      | Abel      | 11000.00 |
+| Michael    | Hartstein | 13000.00 |
+| Shelley    | Higgins   | 12000.00 |
++------------+-----------+----------+
+
+8- select first_name, last_name, salary, department_id from employees group by department_id having salary > avg(salary) ;
++------------+-----------+----------+---------------+
+| first_name | last_name | salary   | department_id |
++------------+-----------+----------+---------------+
+| Michael    | Hartstein | 13000.00 |            20 |
+| Den        | Raphaely  | 11000.00 |            30 |
+| Matthew    | Weiss     |  8000.00 |            50 |
+| Alexander  | Hunold    |  9000.00 |            60 |
+| John       | Russell   | 14000.00 |            80 |
+| Steven     | King      | 24000.00 |            90 |
+| Nancy      | Greenberg | 12000.00 |           100 |
+| Shelley    | Higgins   | 12000.00 |           110 |
++------------+-----------+----------+---------------+
+
+9- select first_name, last_name, salary, department_id from employees group by department_id having salary = max(salary);
++------------+-----------+----------+---------------+
+| first_name | last_name | salary   | department_id |
++------------+-----------+----------+---------------+
+| Kimberely  | Grant     |  7000.00 |          NULL |
+| Jennifer   | Whalen    |  4400.00 |            10 |
+| Michael    | Hartstein | 13000.00 |            20 |
+| Den        | Raphaely  | 11000.00 |            30 |
+| Susan      | Mavris    |  6500.00 |            40 |
+| Alexander  | Hunold    |  9000.00 |            60 |
+| Hermann    | Baer      | 10000.00 |            70 |
+| John       | Russell   | 14000.00 |            80 |
+| Steven     | King      | 24000.00 |            90 |
+| Nancy      | Greenberg | 12000.00 |           100 |
+| Shelley    | Higgins   | 12000.00 |           110 |
++------------+-----------+----------+---------------+
+
+10- select first_name, last_name, job_title, job_id, salary from employees natural join jobs where department_id = 20;
++------------+-----------+--------------------------+--------+----------+
+| first_name | last_name | job_title                | job_id | salary   |
++------------+-----------+--------------------------+--------+----------+
+| Michael    | Hartstein | Marketing Manager        | MK_MAN | 13000.00 |
+| Pat        | Fay       | Marketing Representative | MK_REP |  6000.00 |
++------------+-----------+--------------------------+--------+----------+
+
+11- select first_name, last_name, job_id, max(salary) from employees group by job_id;
++------------+-----------+------------+-------------+
+| first_name | last_name | job_id     | max(salary) |
++------------+-----------+------------+-------------+
+| William    | Gietz     | AC_ACCOUNT |     8300.00 |
+| Shelley    | Higgins   | AC_MGR     |    12000.00 |
+| Jennifer   | Whalen    | AD_ASST    |     4400.00 |
+| Steven     | King      | AD_PRES    |    24000.00 |
+| Neena      | Kochhar   | AD_VP      |    17000.00 |
+| Daniel     | Faviet    | FI_ACCOUNT |     9000.00 |
+| Nancy      | Greenberg | FI_MGR     |    12000.00 |
+| Susan      | Mavris    | HR_REP     |     6500.00 |
+| Alexander  | Hunold    | IT_PROG    |     9000.00 |
+| Shanta     | Vollman   | MK_MAN     |    13000.00 |
+| Pat        | Fay       | MK_REP     |     6000.00 |
+| Hermann    | Baer      | PR_REP     |    10000.00 |
+| Alexander  | Khoo      | PU_CLERK   |     3100.00 |
+| Den        | Raphaely  | PU_MAN     |    11000.00 |
+| John       | Russell   | SA_MAN     |    14000.00 |
+| Peter      | Tucker    | SA_REP     |    11500.00 |
+| Winston    | Taylor    | SH_CLERK   |     4200.00 |
+| Julia      | Nayer     | ST_CLERK   |     3600.00 |
+| Matthew    | Weiss     | ST_MAN     |     8200.00 |
++------------+-----------+------------+-------------+
+
+12-  select first_name, last_name, job_id, job_title from emp_details_view where department_id in (20,50) group by department_name;
++------------+-----------+--------+-------------------+
+| first_name | last_name | job_id | job_title         |
++------------+-----------+--------+-------------------+
+| Michael    | Hartstein | MK_MAN | Marketing Manager |
+| Shanta     | Vollman   | MK_MAN | Marketing Manager |
++------------+-----------+--------+-------------------+
+
+13- select * from departments natural join employees where department_name = "Finance";
++---------------+------------+-----------------+-------------+-------------+-------------+-----------+----------+--------------+------------+------------+---------+----------------+
+| department_id | manager_id | department_name | location_id | employee_id | first_name  | last_name | email    | phone_number | hire_date  | job_id     | salary  | commission_pct |
++---------------+------------+-----------------+-------------+-------------+-------------+-----------+----------+--------------+------------+------------+---------+----------------+
+|           100 |        108 | Finance         |        1700 |         109 | Daniel      | Faviet    | DFAVIET  | 515.124.4169 | 1994-08-16 | FI_ACCOUNT | 9000.00 |           NULL |
+|           100 |        108 | Finance         |        1700 |         110 | John        | Chen      | JCHEN    | 515.124.4269 | 1997-09-28 | FI_ACCOUNT | 8200.00 |           NULL |
+|           100 |        108 | Finance         |        1700 |         111 | Ismael      | Sciarra   | ISCIARRA | 515.124.4369 | 1997-09-30 | FI_ACCOUNT | 7700.00 |           NULL |
+|           100 |        108 | Finance         |        1700 |         112 | Jose Manuel | Urman     | JMURMAN  | 515.124.4469 | 1998-03-07 | FI_ACCOUNT | 7800.00 |           NULL |
+|           100 |        108 | Finance         |        1700 |         113 | Luis        | Popp      | LPOPP    | 515.124.4567 | 1999-12-07 | FI_ACCOUNT | 6900.00 |           NULL |
++---------------+------------+-----------------+-------------+-------------+-------------+-----------+----------+--------------+------------+------------+---------+----------------+
+
+14- select first_name, last_name, City from employees inner join departments using(department_id) inner join locations using(location_id) where city="toronto";
++------------+-----------+---------+
+| first_name | last_name | City    |
++------------+-----------+---------+
+| Michael    | Hartstein | Toronto |
+| Pat        | Fay       | Toronto |
++------------+-----------+---------+
+
+15- select first_name,last_name,job_title,department_name from employees inner join jobs using(job_id) inner join departments   using(department_id);
++-------------+-------------+---------------------------------+------------------+
+| first_name  | last_name   | job_title                       | department_name  |
++-------------+-------------+---------------------------------+------------------+
+| William     | Gietz       | Public Accountant               | Accounting       |
+| Shelley     | Higgins     | Accounting Manager              | Accounting       |
+| Jennifer    | Whalen      | Administration Assistant        | Administration   |
+| Steven      | King        | President                       | Executive        |
+| Neena       | Kochhar     | Administration Vice President   | Executive        |
+| Lex         | De Haan     | Administration Vice President   | Executive        |
+| Daniel      | Faviet      | Accountant                      | Finance          |
+| John        | Chen        | Accountant                      | Finance          |
+| Ismael      | Sciarra     | Accountant                      | Finance          |
+| Jose Manuel | Urman       | Accountant                      | Finance          |
+| Luis        | Popp        | Accountant                      | Finance          |
+| Nancy       | Greenberg   | Finance Manager                 | Finance          |
+| Susan       | Mavris      | Human Resources Representative  | Human Resources  |
+| Alexander   | Hunold      | Programmer                      | IT               |
+| Bruce       | Ernst       | Programmer                      | IT               |
+| David       | Austin      | Programmer                      | IT               |
+| Valli       | Pataballa   | Programmer                      | IT               |
+| Diana       | Lorentz     | Programmer                      | IT               |
+| Shanta      | Vollman     | Marketing Manager               | Shipping         |
+| Michael     | Hartstein   | Marketing Manager               | Marketing        |
+| Pat         | Fay         | Marketing Representative        | Marketing        |
+| Hermann     | Baer        | Public Relations Representative | Public Relations |
+| Alexander   | Khoo        | Purchasing Clerk                | Purchasing       |
+| Shelli      | Baida       | Purchasing Clerk                | Purchasing       |
+| Sigal       | Tobias      | Purchasing Clerk                | Purchasing       |
+| Guy         | Himuro      | Purchasing Clerk                | Purchasing       |
+| Karen       | Colmenares  | Purchasing Clerk                | Purchasing       |
+| Den         | Raphaely    | Purchasing Manager              | Purchasing       |
+| John        | Russell     | Sales Manager                   | Sales            |
+| Karen       | Partners    | Sales Manager                   | Sales            |
+| Alberto     | Errazuriz   | Sales Manager                   | Sales            |
+| Gerald      | Cambrault   | Sales Manager                   | Sales            |
+| Eleni       | Zlotkey     | Sales Manager                   | Sales            |
+| Peter       | Tucker      | Sales Representative            | Sales            |
+| David       | Bernstein   | Sales Representative            | Sales            |
+| Peter       | Hall        | Sales Representative            | Sales            |
+| Christopher | Olsen       | Sales Representative            | Sales            |
+| Nanette     | Cambrault   | Sales Representative            | Sales            |
+| Oliver      | Tuvault     | Sales Representative            | Sales            |
+| Janette     | King        | Sales Representative            | Sales            |
+| Patrick     | Sully       | Sales Representative            | Sales            |
+| Allan       | McEwen      | Sales Representative            | Sales            |
+| Lindsey     | Smith       | Sales Representative            | Sales            |
+| Louise      | Doran       | Sales Representative            | Sales            |
+| Sarath      | Sewall      | Sales Representative            | Sales            |
+| Clara       | Vishney     | Sales Representative            | Sales            |
+| Danielle    | Greene      | Sales Representative            | Sales            |
+| Mattea      | Marvins     | Sales Representative            | Sales            |
+| David       | Lee         | Sales Representative            | Sales            |
+| Sundar      | Ande        | Sales Representative            | Sales            |
+| Amit        | Banda       | Sales Representative            | Sales            |
+| Lisa        | Ozer        | Sales Representative            | Sales            |
+| Harrison    | Bloom       | Sales Representative            | Sales            |
+| Tayler      | Fox         | Sales Representative            | Sales            |
+| William     | Smith       | Sales Representative            | Sales            |
+| Elizabeth   | Bates       | Sales Representative            | Sales            |
+| Sundita     | Kumar       | Sales Representative            | Sales            |
+| Ellen       | Abel        | Sales Representative            | Sales            |
+| Alyssa      | Hutton      | Sales Representative            | Sales            |
+| Jonathon    | Taylor      | Sales Representative            | Sales            |
+| Jack        | Livingston  | Sales Representative            | Sales            |
+| Charles     | Johnson     | Sales Representative            | Sales            |
+| Winston     | Taylor      | Shipping Clerk                  | Shipping         |
+| Jean        | Fleaur      | Shipping Clerk                  | Shipping         |
+| Martha      | Sullivan    | Shipping Clerk                  | Shipping         |
+| Girard      | Geoni       | Shipping Clerk                  | Shipping         |
+| Nandita     | Sarchand    | Shipping Clerk                  | Shipping         |
+| Alexis      | Bull        | Shipping Clerk                  | Shipping         |
+| Julia       | Dellinger   | Shipping Clerk                  | Shipping         |
+| Anthony     | Cabrio      | Shipping Clerk                  | Shipping         |
+| Kelly       | Chung       | Shipping Clerk                  | Shipping         |
+| Jennifer    | Dilly       | Shipping Clerk                  | Shipping         |
+| Timothy     | Gates       | Shipping Clerk                  | Shipping         |
+| Randall     | Perkins     | Shipping Clerk                  | Shipping         |
+| Sarah       | Bell        | Shipping Clerk                  | Shipping         |
+| Britney     | Everett     | Shipping Clerk                  | Shipping         |
+| Samuel      | McCain      | Shipping Clerk                  | Shipping         |
+| Vance       | Jones       | Shipping Clerk                  | Shipping         |
+| Alana       | Walsh       | Shipping Clerk                  | Shipping         |
+| Kevin       | Feeney      | Shipping Clerk                  | Shipping         |
+| Donald      | OConnell    | Shipping Clerk                  | Shipping         |
+| Douglas     | Grant       | Shipping Clerk                  | Shipping         |
+| Julia       | Nayer       | Stock Clerk                     | Shipping         |
+| Irene       | Mikkilineni | Stock Clerk                     | Shipping         |
+| James       | Landry      | Stock Clerk                     | Shipping         |
+| Steven      | Markle      | Stock Clerk                     | Shipping         |
+| Laura       | Bissot      | Stock Clerk                     | Shipping         |
+| Mozhe       | Atkinson    | Stock Clerk                     | Shipping         |
+| James       | Marlow      | Stock Clerk                     | Shipping         |
+| TJ          | Olson       | Stock Clerk                     | Shipping         |
+| Jason       | Mallin      | Stock Clerk                     | Shipping         |
+| Michael     | Rogers      | Stock Clerk                     | Shipping         |
+| Ki          | Gee         | Stock Clerk                     | Shipping         |
+| Hazel       | Philtanker  | Stock Clerk                     | Shipping         |
+| Renske      | Ladwig      | Stock Clerk                     | Shipping         |
+| Stephen     | Stiles      | Stock Clerk                     | Shipping         |
+| John        | Seo         | Stock Clerk                     | Shipping         |
+| Joshua      | Patel       | Stock Clerk                     | Shipping         |
+| Trenna      | Rajs        | Stock Clerk                     | Shipping         |
+| Curtis      | Davies      | Stock Clerk                     | Shipping         |
+| Randall     | Matos       | Stock Clerk                     | Shipping         |
+| Peter       | Vargas      | Stock Clerk                     | Shipping         |
+| Matthew     | Weiss       | Stock Manager                   | Shipping         |
+| Adam        | Fripp       | Stock Manager                   | Shipping         |
+| Payam       | Kaufling    | Stock Manager                   | Shipping         |
+| Kevin       | Mourgos     | Stock Manager                   | Shipping         |
++-------------+-------------+---------------------------------+------------------+
+
+16- MariaDB [hr]> select first_name, last_name, department_name, department_id, employee_id from emp_details_view group by department_id having count(employee_id) <= 2; ;
++------------+-----------+------------------+---------------+-------------+
+| first_name | last_name | department_name  | department_id | employee_id |
++------------+-----------+------------------+---------------+-------------+
+| Jennifer   | Whalen    | Administration   |            10 |         200 |
+| Michael    | Hartstein | Marketing        |            20 |         201 |
+| Susan      | Mavris    | Human Resources  |            40 |         203 |
+| Hermann    | Baer      | Public Relations |            70 |         204 |
+| Shelley    | Higgins   | Accounting       |           110 |         205 |
++------------+-----------+------------------+---------------+-------------+
+
+17-  select first_name, last_name, department_id, department_name from departments natural join employees order by last_name;
++-------------+------------+---------------+-----------------+
+| first_name  | last_name  | department_id | department_name |
++-------------+------------+---------------+-----------------+
+| Mozhe       | Atkinson   |            50 | Shipping        |
+| David       | Austin     |            60 | IT              |
+| Shelli      | Baida      |            30 | Purchasing      |
+| David       | Bernstein  |            80 | Sales           |
+| Laura       | Bissot     |            50 | Shipping        |
+| Alexis      | Bull       |            50 | Shipping        |
+| Anthony     | Cabrio     |            50 | Shipping        |
+| Nanette     | Cambrault  |            80 | Sales           |
+| John        | Chen       |           100 | Finance         |
+| Karen       | Colmenares |            30 | Purchasing      |
+| Lex         | De Haan    |            90 | Executive       |
+| Julia       | Dellinger  |            50 | Shipping        |
+| Bruce       | Ernst      |            60 | IT              |
+| Daniel      | Faviet     |           100 | Finance         |
+| Pat         | Fay        |            20 | Marketing       |
+| William     | Gietz      |           110 | Accounting      |
+| Peter       | Hall       |            80 | Sales           |
+| Guy         | Himuro     |            30 | Purchasing      |
+| Alexander   | Khoo       |            30 | Purchasing      |
+| Neena       | Kochhar    |            90 | Executive       |
+| Diana       | Lorentz    |            60 | IT              |
+| James       | Marlow     |            50 | Shipping        |
+| Christopher | Olsen      |            80 | Sales           |
+| TJ          | Olson      |            50 | Shipping        |
+| Valli       | Pataballa  |            60 | IT              |
+| Luis        | Popp       |           100 | Finance         |
+| Nandita     | Sarchand   |            50 | Shipping        |
+| Ismael      | Sciarra    |           100 | Finance         |
+| Sigal       | Tobias     |            30 | Purchasing      |
+| Peter       | Tucker     |            80 | Sales           |
+| Oliver      | Tuvault    |            80 | Sales           |
+| Jose Manuel | Urman      |           100 | Finance         |
++-------------+------------+---------------+-----------------+
+
+18- select employee_id, first_name, last_name, department_name, job_title, city, country_name, region_name from emp_details_view ;
++-------------+-------------+-------------+------------------+---------------------------------+---------------------+--------------------------+-------------+
+| employee_id | first_name  | last_name   | department_name  | job_title                       | city                | country_name             | region_name |
++-------------+-------------+-------------+------------------+---------------------------------+---------------------+--------------------------+-------------+
+|         204 | Hermann     | Baer        | Public Relations | Public Relations Representative | Munich              | Germany                  | Europe      |
+|         203 | Susan       | Mavris      | Human Resources  | Human Resources Representative  | London              | United Kingdom           | Europe      |
+|         145 | John        | Russell     | Sales            | Sales Manager                   | Oxford              | United Kingdom           | Europe      |
+|         146 | Karen       | Partners    | Sales            | Sales Manager                   | Oxford              | United Kingdom           | Europe      |
+|         147 | Alberto     | Errazuriz   | Sales            | Sales Manager                   | Oxford              | United Kingdom           | Europe      |
+|         148 | Gerald      | Cambrault   | Sales            | Sales Manager                   | Oxford              | United Kingdom           | Europe      |
+|         149 | Eleni       | Zlotkey     | Sales            | Sales Manager                   | Oxford              | United Kingdom           | Europe      |
+|         150 | Peter       | Tucker      | Sales            | Sales Representative            | Oxford              | United Kingdom           | Europe      |
+|         151 | David       | Bernstein   | Sales            | Sales Representative            | Oxford              | United Kingdom           | Europe      |
+|         152 | Peter       | Hall        | Sales            | Sales Representative            | Oxford              | United Kingdom           | Europe      |
+|         153 | Christopher | Olsen       | Sales            | Sales Representative            | Oxford              | United Kingdom           | Europe      |
+|         154 | Nanette     | Cambrault   | Sales            | Sales Representative            | Oxford              | United Kingdom           | Europe      |
+|         155 | Oliver      | Tuvault     | Sales            | Sales Representative            | Oxford              | United Kingdom           | Europe      |
+|         156 | Janette     | King        | Sales            | Sales Representative            | Oxford              | United Kingdom           | Europe      |
+|         157 | Patrick     | Sully       | Sales            | Sales Representative            | Oxford              | United Kingdom           | Europe      |
+|         158 | Allan       | McEwen      | Sales            | Sales Representative            | Oxford              | United Kingdom           | Europe      |
+|         159 | Lindsey     | Smith       | Sales            | Sales Representative            | Oxford              | United Kingdom           | Europe      |
+|         160 | Louise      | Doran       | Sales            | Sales Representative            | Oxford              | United Kingdom           | Europe      |
+|         161 | Sarath      | Sewall      | Sales            | Sales Representative            | Oxford              | United Kingdom           | Europe      |
+|         162 | Clara       | Vishney     | Sales            | Sales Representative            | Oxford              | United Kingdom           | Europe      |
+|         163 | Danielle    | Greene      | Sales            | Sales Representative            | Oxford              | United Kingdom           | Europe      |
+|         164 | Mattea      | Marvins     | Sales            | Sales Representative            | Oxford              | United Kingdom           | Europe      |
+|         165 | David       | Lee         | Sales            | Sales Representative            | Oxford              | United Kingdom           | Europe      |
+|         166 | Sundar      | Ande        | Sales            | Sales Representative            | Oxford              | United Kingdom           | Europe      |
+|         167 | Amit        | Banda       | Sales            | Sales Representative            | Oxford              | United Kingdom           | Europe      |
+|         168 | Lisa        | Ozer        | Sales            | Sales Representative            | Oxford              | United Kingdom           | Europe      |
+|         169 | Harrison    | Bloom       | Sales            | Sales Representative            | Oxford              | United Kingdom           | Europe      |
+|         170 | Tayler      | Fox         | Sales            | Sales Representative            | Oxford              | United Kingdom           | Europe      |
+|         171 | William     | Smith       | Sales            | Sales Representative            | Oxford              | United Kingdom           | Europe      |
+|         172 | Elizabeth   | Bates       | Sales            | Sales Representative            | Oxford              | United Kingdom           | Europe      |
+|         173 | Sundita     | Kumar       | Sales            | Sales Representative            | Oxford              | United Kingdom           | Europe      |
+|         174 | Ellen       | Abel        | Sales            | Sales Representative            | Oxford              | United Kingdom           | Europe      |
+|         175 | Alyssa      | Hutton      | Sales            | Sales Representative            | Oxford              | United Kingdom           | Europe      |
+|         176 | Jonathon    | Taylor      | Sales            | Sales Representative            | Oxford              | United Kingdom           | Europe      |
+|         177 | Jack        | Livingston  | Sales            | Sales Representative            | Oxford              | United Kingdom           | Europe      |
+|         179 | Charles     | Johnson     | Sales            | Sales Representative            | Oxford              | United Kingdom           | Europe      |
+|         201 | Michael     | Hartstein   | Marketing        | Marketing Manager               | Toronto             | Canada                   | Americas    |
+|         202 | Pat         | Fay         | Marketing        | Marketing Representative        | Toronto             | Canada                   | Americas    |
+|         103 | Alexander   | Hunold      | IT               | Programmer                      | Southlake           | United States of America | Americas    |
+|         104 | Bruce       | Ernst       | IT               | Programmer                      | Southlake           | United States of America | Americas    |
+|         105 | David       | Austin      | IT               | Programmer                      | Southlake           | United States of America | Americas    |
+|         106 | Valli       | Pataballa   | IT               | Programmer                      | Southlake           | United States of America | Americas    |
+|         107 | Diana       | Lorentz     | IT               | Programmer                      | Southlake           | United States of America | Americas    |
+|         120 | Matthew     | Weiss       | Shipping         | Stock Manager                   | South San Francisco | United States of America | Americas    |
+|         121 | Adam        | Fripp       | Shipping         | Stock Manager                   | South San Francisco | United States of America | Americas    |
+|         122 | Payam       | Kaufling    | Shipping         | Stock Manager                   | South San Francisco | United States of America | Americas    |
+|         123 | Shanta      | Vollman     | Shipping         | Marketing Manager               | South San Francisco | United States of America | Americas    |
+|         124 | Kevin       | Mourgos     | Shipping         | Stock Manager                   | South San Francisco | United States of America | Americas    |
+|         125 | Julia       | Nayer       | Shipping         | Stock Clerk                     | South San Francisco | United States of America | Americas    |
+|         126 | Irene       | Mikkilineni | Shipping         | Stock Clerk                     | South San Francisco | United States of America | Americas    |
+|         127 | James       | Landry      | Shipping         | Stock Clerk                     | South San Francisco | United States of America | Americas    |
+|         128 | Steven      | Markle      | Shipping         | Stock Clerk                     | South San Francisco | United States of America | Americas    |
+|         129 | Laura       | Bissot      | Shipping         | Stock Clerk                     | South San Francisco | United States of America | Americas    |
+|         130 | Mozhe       | Atkinson    | Shipping         | Stock Clerk                     | South San Francisco | United States of America | Americas    |
+|         131 | James       | Marlow      | Shipping         | Stock Clerk                     | South San Francisco | United States of America | Americas    |
+|         132 | TJ          | Olson       | Shipping         | Stock Clerk                     | South San Francisco | United States of America | Americas    |
+|         133 | Jason       | Mallin      | Shipping         | Stock Clerk                     | South San Francisco | United States of America | Americas    |
+|         134 | Michael     | Rogers      | Shipping         | Stock Clerk                     | South San Francisco | United States of America | Americas    |
+|         135 | Ki          | Gee         | Shipping         | Stock Clerk                     | South San Francisco | United States of America | Americas    |
+|         136 | Hazel       | Philtanker  | Shipping         | Stock Clerk                     | South San Francisco | United States of America | Americas    |
+|         137 | Renske      | Ladwig      | Shipping         | Stock Clerk                     | South San Francisco | United States of America | Americas    |
+|         138 | Stephen     | Stiles      | Shipping         | Stock Clerk                     | South San Francisco | United States of America | Americas    |
+|         139 | John        | Seo         | Shipping         | Stock Clerk                     | South San Francisco | United States of America | Americas    |
+|         140 | Joshua      | Patel       | Shipping         | Stock Clerk                     | South San Francisco | United States of America | Americas    |
+|         141 | Trenna      | Rajs        | Shipping         | Stock Clerk                     | South San Francisco | United States of America | Americas    |
+|         142 | Curtis      | Davies      | Shipping         | Stock Clerk                     | South San Francisco | United States of America | Americas    |
+|         143 | Randall     | Matos       | Shipping         | Stock Clerk                     | South San Francisco | United States of America | Americas    |
+|         144 | Peter       | Vargas      | Shipping         | Stock Clerk                     | South San Francisco | United States of America | Americas    |
+|         180 | Winston     | Taylor      | Shipping         | Shipping Clerk                  | South San Francisco | United States of America | Americas    |
+|         181 | Jean        | Fleaur      | Shipping         | Shipping Clerk                  | South San Francisco | United States of America | Americas    |
+|         182 | Martha      | Sullivan    | Shipping         | Shipping Clerk                  | South San Francisco | United States of America | Americas    |
+|         183 | Girard      | Geoni       | Shipping         | Shipping Clerk                  | South San Francisco | United States of America | Americas    |
+|         184 | Nandita     | Sarchand    | Shipping         | Shipping Clerk                  | South San Francisco | United States of America | Americas    |
+|         185 | Alexis      | Bull        | Shipping         | Shipping Clerk                  | South San Francisco | United States of America | Americas    |
+|         186 | Julia       | Dellinger   | Shipping         | Shipping Clerk                  | South San Francisco | United States of America | Americas    |
+|         187 | Anthony     | Cabrio      | Shipping         | Shipping Clerk                  | South San Francisco | United States of America | Americas    |
+|         188 | Kelly       | Chung       | Shipping         | Shipping Clerk                  | South San Francisco | United States of America | Americas    |
+|         189 | Jennifer    | Dilly       | Shipping         | Shipping Clerk                  | South San Francisco | United States of America | Americas    |
+|         190 | Timothy     | Gates       | Shipping         | Shipping Clerk                  | South San Francisco | United States of America | Americas    |
+|         191 | Randall     | Perkins     | Shipping         | Shipping Clerk                  | South San Francisco | United States of America | Americas    |
+|         192 | Sarah       | Bell        | Shipping         | Shipping Clerk                  | South San Francisco | United States of America | Americas    |
+|         193 | Britney     | Everett     | Shipping         | Shipping Clerk                  | South San Francisco | United States of America | Americas    |
+|         194 | Samuel      | McCain      | Shipping         | Shipping Clerk                  | South San Francisco | United States of America | Americas    |
+|         195 | Vance       | Jones       | Shipping         | Shipping Clerk                  | South San Francisco | United States of America | Americas    |
+|         196 | Alana       | Walsh       | Shipping         | Shipping Clerk                  | South San Francisco | United States of America | Americas    |
+|         197 | Kevin       | Feeney      | Shipping         | Shipping Clerk                  | South San Francisco | United States of America | Americas    |
+|         198 | Donald      | OConnell    | Shipping         | Shipping Clerk                  | South San Francisco | United States of America | Americas    |
+|         199 | Douglas     | Grant       | Shipping         | Shipping Clerk                  | South San Francisco | United States of America | Americas    |
+|         200 | Jennifer    | Whalen      | Administration   | Administration Assistant        | Seattle             | United States of America | Americas    |
+|         114 | Den         | Raphaely    | Purchasing       | Purchasing Manager              | Seattle             | United States of America | Americas    |
+|         115 | Alexander   | Khoo        | Purchasing       | Purchasing Clerk                | Seattle             | United States of America | Americas    |
+|         116 | Shelli      | Baida       | Purchasing       | Purchasing Clerk                | Seattle             | United States of America | Americas    |
+|         117 | Sigal       | Tobias      | Purchasing       | Purchasing Clerk                | Seattle             | United States of America | Americas    |
+|         118 | Guy         | Himuro      | Purchasing       | Purchasing Clerk                | Seattle             | United States of America | Americas    |
+|         119 | Karen       | Colmenares  | Purchasing       | Purchasing Clerk                | Seattle             | United States of America | Americas    |
+|         100 | Steven      | King        | Executive        | President                       | Seattle             | United States of America | Americas    |
+|         101 | Neena       | Kochhar     | Executive        | Administration Vice President   | Seattle             | United States of America | Americas    |
+|         102 | Lex         | De Haan     | Executive        | Administration Vice President   | Seattle             | United States of America | Americas    |
+|         108 | Nancy       | Greenberg   | Finance          | Finance Manager                 | Seattle             | United States of America | Americas    |
+|         109 | Daniel      | Faviet      | Finance          | Accountant                      | Seattle             | United States of America | Americas    |
+|         110 | John        | Chen        | Finance          | Accountant                      | Seattle             | United States of America | Americas    |
+|         111 | Ismael      | Sciarra     | Finance          | Accountant                      | Seattle             | United States of America | Americas    |
+|         112 | Jose Manuel | Urman       | Finance          | Accountant                      | Seattle             | United States of America | Americas    |
+|         113 | Luis        | Popp        | Finance          | Accountant                      | Seattle             | United States of America | Americas    |
+|         205 | Shelley     | Higgins     | Accounting       | Accounting Manager              | Seattle             | United States of America | Americas    |
+|         206 | William     | Gietz       | Accounting       | Public Accountant               | Seattle             | United States of America | Americas    |
++-------------+-------------+-------------+------------------+---------------------------------+---------------------+--------------------------+-------------+ 
+
+
+19- select department_id, min(salary) as salary from employees group by department_id having salary < 5000;
++---------------+---------+
+| department_id | salary  |
++---------------+---------+
+|            10 | 4400.00 |
+|            30 | 2500.00 |
+|            50 | 2100.00 |
+|            60 | 4200.00 |
++---------------+---------+
