@@ -1,0 +1,295 @@
+		1- Select SNAME from students NATURAL JOIN registration WHERE cid = 304;
++--------+
+| SNAME  |
++--------+
+| Erum   |
+| Junaid |
++--------+ 
+
+2- Select *  FROM COURSES NATURAL JOIN STUDENTS NATURAL JOIN REGISTRATION WHERE NOT CNAME = 304; 
++-----+-----+-------------+------------+--------+---------+------+----------+------------+
+| cid | sid | cname       | Instructor | crd_hr | sname   | CGPA | semester | reg_date   |
++-----+-----+-------------+------------+--------+---------+------+----------+------------+
+| 302 |  10 | Algorithm   | Bilal      |      4 | Ali     |  2.2 |        5 | 2016-08-10 |
+| 101 |  11 | ITC         | Shahid     |      4 | Bilal   | NULL |        1 | 2016-08-11 |
+| 104 |  11 | Calculus    | Tariq      |      3 | Bilal   | NULL |        1 | 2016-08-12 |
+| 201 |  12 | Programming | Farhan     |      4 | Danish  |  3.6 |        3 | 2016-08-10 |
+| 304 |  13 | Database    | Nadeem     |      4 | Erum    |  2.5 |        5 | 2016-08-15 |
+| 209 |  14 | Electronics | Mazahir    |      3 | Fatima  |    3 |        3 | 2016-08-10 |
+| 402 |  15 | Compiler    | Madiha     |      4 | Faraz   |  2.8 |        7 | 2016-08-12 |
+| 302 |  16 | Algorithm   | Bilal      |      4 | Gohar   |  1.9 |        9 | 2016-08-11 |
+| 203 |  17 | Discrete    | Usama      |      3 | Hatim   |    2 |        4 | 2016-08-11 |
+| 310 |  17 | Automata    | Usama      |      3 | Hatim   |    2 |        4 | 2016-08-12 |
+| 203 |  18 | Discrete    | Usama      |      3 | Iqtidar |  3.1 |        3 | 2016-08-11 |
+| 304 |  19 | Database    | Nadeem     |      4 | Junaid  |  3.5 |        7 | 2016-08-12 |
+| 101 |  20 | ITC         | Shahid     |      4 | Kamal   | NULL |        1 | 2016-08-15 |
+| 108 |  20 | English     | Shaista    |      3 | Kamal   | NULL |        1 | 2016-08-15 |
+| 203 |  21 | Discrete    | Usama      |      3 | Majeed  |  2.9 |        3 | 2016-08-12 |
+| 209 |  22 | Electronics | Mazahir    |      3 | Nargis  |  3.8 |        3 | 2016-08-15 |
+| 204 |  23 | Coal        | Askar      |      4 | Osama   |  1.8 |        9 | 2016-08-10 |
+| 307 |  23 | Networks    | Sadiq      |      4 | Osama   |  1.8 |        9 | 2016-08-11 |
+| 314 |  23 | Ooad        | Farhan     |      4 | Osama   |  1.8 |        9 | 2016-08-12 |
+| 406 |  23 | Project     | Zeshan     |      3 | Osama   |  1.8 |        9 | 2016-08-15 |
+| 204 |  24 | Coal        | Askar      |      4 | Qaseem  |    3 |        3 | 2016-08-15 |
+| 203 |  25 | Discrete    | Usama      |      3 | Raza    |  3.4 |        3 | 2016-08-15 |
+| 209 |  27 | Electronics | Mazahir    |      3 | Samar   |  2.6 |        3 | 2016-08-15 |
+| 101 |  29 | ITC         | Shahid     |      4 | Taha    | NULL |        1 | 2016-08-12 |
+| 108 |  29 | English     | Shaista    |      3 | Taha    | NULL |        1 | 2016-08-15 |
+| 310 |  30 | Automata    | Usama      |      3 | Umair   |  2.3 |        7 | 2016-08-15 |
+| 402 |  30 | Compiler    | Madiha     |      4 | Umair   |  2.3 |        7 | 2016-08-15 |
+| 406 |  30 | Project     | Zeshan     |      3 | Umair   |  2.3 |        7 | 2016-08-15 |
++-----+-----+-------------+------------+--------+---------+------+----------+------------+
+28 rows in set, 28 warnings (0.001 sec)
+
+
+3- Select SNAME from students NATURAL JOIN registration GROUP BY SID HAVING COUNT(SID) >= 2;
++-------+
+| SNAME |
++-------+
+| Bilal |
+| Hatim |
+| Kamal |
+| Osama |
+| Taha  |
+| Umair |
++-------+
+
+4- Select SNAME from COURSES NATURAL JOIN STUDENTS NATURAL JOIN REGISTRATION WHERE CNAME = 'DATABASE';
++--------+
+| SNAME  |
++--------+
+| Erum   |
+| Junaid |
++--------+
+
+5- Select CNAME from COURSES NATURAL JOIN STUDENTS NATURAL JOIN REGISTRATION WHERE SNAME = 'JUNAID' ;
++----------+
+| CNAME    |
++----------+
+| Database |
++----------+
+
+
+6- Select SNAME from COURSES NATURAL JOIN STUDENTS NATURAL JOIN REGISTRATION WHERE INSTRUCTOR IN ('USAMA', 'ZESHAN');
++---------+
+| SNAME   |
++---------+
+| Hatim   |
+| Hatim   |
+| Iqtidar |
+| Majeed  |
+| Osama   |
+| Raza    |
+| Umair   |
+| Umair   |
++---------+
+
+7-select sname from students natural join registration natural join courses where CNAME = 'Project' AND CNAME = 'Network';
+
+8- Select INSTRUCTOR , cgpa from COURSES NATURAL JOIN registration NATURAL JOIN students WHERE CGPA > (select AVG(CGPA) from students);
++------------+------+
+| INSTRUCTOR | cgpa |
++------------+------+
+| Farhan     |  3.6 |
+| Mazahir    |    3 |
+| Madiha     |  2.8 |
+| Usama      |  3.1 |
+| Nadeem     |  3.5 |
+| Usama      |  2.9 |
+| Mazahir    |  3.8 |
+| Askar      |    3 |
+| Usama      |  3.4 |
++------------+------+
+
+9- Select SNAME, CNAME from COURSES NATURAL JOIN STUDENTS NATURAL JOIN REGISTRATION where NOT cname = 'DATABASE' AND CNAME = 'ALGORITHM';
++-------+-----------+
+| SNAME | CNAME     |
++-------+-----------+
+| Ali   | Algorithm |
+| Gohar | Algorithm |
++-------+-----------+
+
+10- Select SNAME , CNAME from COURSES NATURAL JOIN STUDENTS NATURAL JOIN REGISTRATION WHERE INSTRUCTOR = 'ZESHAN'
+    -> ;
++-------+---------+
+| SNAME | CNAME   |
++-------+---------+
+| Osama | Project |
+| Umair | Project |
++-------+---------+
+
+11- select sname from students where sid in (select sid from registration where reg_date = all(select distinct reg_date from registration));
+Empty set (0.008 sec)
+
+12- Select SNAME from STUDENTS NATURAL JOIN REGISTRATION GROUP BY REG_DATE;
++-------+
+| SNAME |
++-------+
+| Ali   |
+| Bilal |
+| Bilal |
+| Erum  |
++-------+
+
+13- Select INSTRUCTOR FROM COURSES WHERE INSTRUCTOR LIKE 'M_____%' AND CRD_HR = 4 ;
++------------+
+| INSTRUCTOR |
++------------+
+| Madiha     |
++------------+
+
+14-  Select INSTRUCTOR FROM COURSES GROUP BY INSTRUCTOR  HAVING COUNT(INSTRUCTOR) = 2;
++------------+
+| INSTRUCTOR |
++------------+
+| Farhan     |
+| Usama      |
++------------+
+
+15- Select SNAME, CNAME, INSTRUCTOR from COURSES NATURAL JOIN STUDENTS NATURAL JOIN REGISTRATION WHERE INSTRUCTOR = 'SHAHID' OR CNAME = 'DISCRETE';
++---------+----------+------------+
+| SNAME   | CNAME    | INSTRUCTOR |
++---------+----------+------------+
+| Bilal   | ITC      | Shahid     |
+| Hatim   | Discrete | Usama      |
+| Iqtidar | Discrete | Usama      |
+| Kamal   | ITC      | Shahid     |
+| Majeed  | Discrete | Usama      |
+| Raza    | Discrete | Usama      |
+| Taha    | ITC      | Shahid     |
++---------+----------+------------+
+
+16- SELECT SNAME, CGPA FROM STUDENTS WHERE CGPA > (SELECT CGPA FROM STUDENTS WHERE SNAME = 'FARAZ');
++---------+------+
+| SNAME   | CGPA |
++---------+------+
+| Danish  |  3.6 |
+| Fatima  |    3 |
+| Iqtidar |  3.1 |
+| Junaid  |  3.5 |
+| Majeed  |  2.9 |
+| Nargis  |  3.8 |
+| Qaseem  |    3 |
+| Raza    |  3.4 |
++---------+------+
+
+17- Select INSTRUCTOR from COURSES NATURAL JOIN STUDENTS NATURAL JOIN REGISTRATION WHERE SEMESTER = 1;
++------------+
+| INSTRUCTOR |
++------------+
+| Shahid     |
+| Tariq      |
+| Shahid     |
+| Shaista    |
+| Shahid     |
+| Shaista    |
++------------+
+
+18- SELECT SNAME, CGPA FROM STUDENTS WHERE CGPA > (SELECT CGPA FROM STUDENTS WHERE SNAME LIKE 'ALI%')
+    -> ;
++---------+------+
+| SNAME   | CGPA |
++---------+------+
+| Danish  |  3.6 |
+| Erum    |  2.5 |
+| Fatima  |    3 |
+| Faraz   |  2.8 |
+| Iqtidar |  3.1 |
+| Junaid  |  3.5 |
+| Majeed  |  2.9 |
+| Nargis  |  3.8 |
+| Qaseem  |    3 |
+| Raza    |  3.4 |
+| Samar   |  2.6 |
+| Umair   |  2.3 |
++---------+------+
+
+19-Select * FROM STUDENTS ORDER BY CGPA DESC LIMIT 1 ;
++-----+--------+------+----------+
+| sid | sname  | CGPA | semester |
++-----+--------+------+----------+
+|  22 | Nargis |  3.8 |        3 |
++-----+--------+------+----------+
+
+20- Select AVG(CGPA) from COURSES NATURAL JOIN STUDENTS NATURAL JOIN REGISTRATION WHERE CID LIKE '2__';
++--------------------+
+| AVG(CGPA)          |
++--------------------+
+| 2.9199999809265136 |
++--------------------+
+
+21- SELECT SNAME, MAX(CGPA) FROM STUDENTS WHERE CGPA NOT BETWEEN 3 AND 4;
++-------+-----------+
+| SNAME | MAX(CGPA) |
++-------+-----------+
+| Ali   |       2.9 |
++-------+-----------+
+
+22- SELECT SNAME FROM STUDENTS WHERE CGPA<2;
+
+23- Select count(sname) as 'Total Students', cname from COURSES NATURAL JOIN STUDENTS NATURAL JOIN REGISTRATION where cname = 'algorithm';
++----------------+-----------+
+| Total Students | cname     |
++----------------+-----------+
+|              2 | Algorithm |
++----------------+-----------+
+
+24- select sname from students where semester = (select semester from students group by semester having count(sid) >= 5);
++---------+
+| sname   |
++---------+
+| Danish  |
+| Fatima  |
+| Iqtidar |
+| Majeed  |
+| Nargis  |
+| Qaseem  |
+| Raza    |
+| Samar   |
++---------+
+
+25-  Select CNAME from COURSES NATURAL JOIN STUDENTS NATURAL JOIN REGISTRATION WHERE SNAME IS NULL;
+Empty set (0.000 sec)
+
+26-  select cid , crd_hr from courses natural join registration natural join students group by cid;
++-----+--------+
+| cid | crd_hr |
++-----+--------+
+| 101 |      4 |
+| 104 |      3 |
+| 108 |      3 |
+| 201 |      4 |
+| 203 |      3 |
+| 204 |      4 |
+| 209 |      3 |
+| 302 |      4 |
+| 304 |      4 |
+| 307 |      4 |
+| 310 |      3 |
+| 314 |      4 |
+| 402 |      4 |
+| 406 |      3 |
++-----+--------+
+
+27- Select DISTINCT CNAME from COURSES NATURAL JOIN STUDENTS NATURAL JOIN REGISTRATION WHERE SEMESTER = 1;
++----------+
+| CNAME    |
++----------+
+| ITC      |
+| Calculus |
+| English  |
++----------+
+
+28-  select sname from registration natural join students group by reg_date,sid having count(sid) >= 3;
++-------+
+| sname |
++-------+
+| Umair |
++-------+
+
+
+
+
+
+
+
