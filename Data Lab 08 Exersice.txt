@@ -1,0 +1,78 @@
+1- update empfr set emp_phone='324-9652' where emp_num='100';
+
+select * from empfr;
++---------+-----------+------------+-----------+------------+---------------+---------------+-----------+-----------+
+| EMP_NUM | EMP_TITLE | EMP_LNAME  | EMP_FNAME | EMP_DOB    | EMP_HIRE_DATE | EMP_AREA_CODE | EMP_PHONE | PARK_CODE |
++---------+-----------+------------+-----------+------------+---------------+---------------+-----------+-----------+
+|     100 | Ms        | Calderdale | Emma      | 1972-06-15 | 1992-03-15    | 0181          | 324-9652  | FR1001    |
+|     102 | Mr        | Arshad     | Arif      | 1969-11-14 | 1990-12-20    | 7253          | 675-8993  | FR1001    |
+|     105 | Ms        | Namowa     | Mirrelle  | 1990-03-14 | 2006-11-08    | 0181          | 890-3243  | FR1001    |
++---------+-----------+------------+-----------+------------+---------------+---------------+-----------+-----------+
+
+
+2- create view emp_detail as select e. emp_num,t.park_code,t.park_name,e.emp_lname,e.emp_fname,e.emp_hire_date,e.emp_dob
+ from employee e join  themepark t where e.park_code=t.park_code;
+
+ select * from emp_detail;
++---------+-----------+--------------+------------+-----------+---------------+------------+
+| emp_num | park_code | park_name    | emp_lname  | emp_fname | emp_hire_date | emp_dob    |
++---------+-----------+--------------+------------+-----------+---------------+------------+
+|     100 | FR1001    | FairyLand    | Calderdale | Emma      | 1992-03-15    | 1972-06-15 |
+|     101 | UK3452    | PleasureLand | Ricardo    | Marshel   | 1996-04-25    | 1978-03-19 |
+|     102 | FR1001    | FairyLand    | Arshad     | Arif      | 1990-12-20    | 1969-11-14 |
+|     103 | UK3452    | PleasureLand | Roberts    | Anne      | 1994-08-16    | 1974-10-16 |
+|     104 | ZA1342    | GoldTown     | Denver     | Enrica    | 2001-10-20    | 1980-11-08 |
+|     105 | FR1001    | FairyLand    | Namowa     | Mirrelle  | 2006-11-08    | 1990-03-14 |
+|     106 | ZA1342    | GoldTown     | Smith      | Gemma     | 1989-01-05    | 1968-02-12 |
+|    2049 | AU1001    | MiniLand     | Usman      | Manzoor   | 2015-05-05    | 1990-12-20 |
++---------+-----------+--------------+------------+-----------+---------------+------------+
+
+3- select emp_fname,emp_lname,park_name from emp_detail;
++-----------+------------+--------------+
+| emp_fname | emp_lname  | park_name    |
++-----------+------------+--------------+
+| Emma      | Calderdale | FairyLand    |
+| Marshel   | Ricardo    | PleasureLand |
+| Arif      | Arshad     | FairyLand    |
+| Anne      | Roberts    | PleasureLand |
+| Enrica    | Denver     | GoldTown     |
+| Mirrelle  | Namowa     | FairyLand    |
+| Gemma     | Smith      | GoldTown     |
+| Manzoor   | Usman      | MiniLand     |
++-----------+------------+--------------+
+
+4- create view ticket_sales as selectpark_name, min(line_price),max(line_price),avg(line_price) from sales_line join sales using(transaction_no)join themepark using(park_code) group by park_name;
+   
+   select* from ticket_sales;
+
+5- select distinct(date_format(sale_date,'%a-%D-%c-%Y')) from sales;
++----------------------------------------+
+| (date_format(sale_date,'%a-%D-%c-%Y')) |
++----------------------------------------+
+| Fri-18th-5-2007                        |
++----------------------------------------+
+
+
+6- select emp_lname,emp_fname,emp_dob, Date_format(emp_dob,'%b') as month from employee where day(emp_dob)='14';
++-----------+-----------+------------+-------+
+| emp_lname | emp_fname | emp_dob    | month |
++-----------+-----------+------------+-------+
+| Arshad    | Arif      | 1969-11-14 | Nov   |
+| Namowa    | Mirrelle  | 1990-03-14 | Mar   |
++-----------+-----------+------------+-------+
+
+8- select emp_fname,emp_phone,concat(substr(emp_phone,1,3),lower((substr(emp_fname,1,2)))) from employee;
++-----------+-----------+--------------------------------------------------------------+
+| emp_fname | emp_phone | concat(substr(emp_phone,1,3),lower((substr(emp_fname,1,2)))) |
++-----------+-----------+--------------------------------------------------------------+
+| Emma      | 324-9652  | 324em                                                        |
+| Marshel   | 324-4472  | 324ma                                                        |
+| Arif      | 675-8993  | 675ar                                                        |
+| Anne      | 898-3456  | 898an                                                        |
+| Enrica    | 504-4434  | 504en                                                        |
+| Mirrelle  | 890-3243  | 890mi                                                        |
+| Gemma     | 324-7845  | 324ge                                                        |
+| Manzoor   | 502-4934  | 502ma                                                        |
++-----------+-----------+--------------------------------------------------------------+
+
+ 

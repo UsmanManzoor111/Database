@@ -1,0 +1,106 @@
+1- delimiter #
+
+create procedure users_insert(in id int, in uname varchar(30), in pword varchar(30), in mail varchar(30))
+    -> begin
+    -> insert into users(id, username, password, email) values(id, uname, pword, mail);
+    -> end#
+Query OK, 0 rows affected (0.013 sec)
+
+call users_insert(3, 'usman', 'usman123', 'usman@gmail.com')#
+Query OK, 1 row affected (0.006 sec)
+
+delimiter ;
+
+select * from users;
++----+----------+----------+------------------+
+| id | username | password | email            |
++----+----------+----------+------------------+
+|  1 |  abc123  | def321   | abc123@gmail.com |
+|  2 | xyz789   | asd123   | xyz789@gmail.com |
+|  3 | usman    | usman123 | usman@gmail.com  |
++----+----------+----------+------------------+
+3 rows in set (0.000 sec)
+
+
+2-   delimiter @
+
+ CREATE PROCEDURE INSERT_SUMMARY(IN A INT, IN B INT, IN C INT, IN D INT, IN E INT)
+    -> BEGIN
+    -> INSERT INTO SUMMARY(ID, TOTAL_USERS, YAHOO, HOTMAIL, GMAIL) VALUES (A,B,C,D,E);
+    -> END@
+Query OK, 0 rows affected (0.009 sec)
+
+
+CALL INSERT_SUMMARY(3,4,4,1,1)@
+Query OK, 1 row affected (0.003 sec)
+
+select * from summary@
++----+-------------+-------+---------+-------+
+| id | total_users | yahoo | hotmail | gmail |
++----+-------------+-------+---------+-------+
+|  1 |           2 |     1 |       0 |     1 |
+|  2 |           2 |     2 |       2 |     2 |
+|  3 |           4 |     4 |       1 |     1 |
++----+-------------+-------+---------+-------+
+3 rows in set (0.000 sec)
+
+3- DELIMITER #
+CREATE PROCEDURE AVG_YAHOO(OUT VALUE DECIMAL)
+    -> BEGIN
+    -> SELECT AVG(YAHOO) INTO VALUE FROM SUMMARY;
+    -> END#
+Query OK, 0 rows affected (0.009 sec)
+
+CALL AVG_YAHOO(@OUT)
+    -> #
+Query OK, 1 row affected, 1 warning (0.002 sec)
+
+ SELECT @OUT
+    -> #
++------+
+| @OUT |
++------+
+|    2 |
++------+
+1 row in set (0.000 sec)
+
+4-  CREATE PROCEDURE MIN_GMAIL(OUT VALUE DECIMAL)
+    -> BEGIN
+    -> SELECT MIN(GMAIL) INTO VALUE FROM SUMMARY;
+    -> END#
+Query OK, 0 rows affected (0.007 sec)
+
+MariaDB [lab_9]> CALL MIN_GMAIL(@OUT)
+    -> #
+Query OK, 1 row affected (0.001 sec)
+
+MariaDB [lab_9]> SELECT @OUT
+    -> #
++------+
+| @OUT |
++------+
+|    1 |
++------+
+1 row in set (0.000 sec)
+
+5- CREATE PROCEDURE MAX_HOTMAIL(OUT VALUE DECIMAL)
+    -> BEGIN
+    -> SELECT MAX(HOTMAIL) INTO VALUE FROM SUMMARY;
+    -> END#
+Query OK, 0 rows affected (0.009 sec)
+
+MariaDB [lab_9]> CALL MAX_HOTMAIL(@OUT)
+    -> #
+Query OK, 1 row affected (0.000 sec)
+
+MariaDB [lab_9]> SELECT @OUT#
++------+
+| @OUT |
++------+
+|    2 |
++------+
+1 row in set (0.000 sec)
+
+
+6- 
+

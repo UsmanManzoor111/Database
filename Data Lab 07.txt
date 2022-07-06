@@ -1,0 +1,87 @@
+ SELECT TICKET_NO, TICKET_TYPE, TICKET_PRICE
+    -> FROM TICKET
+    -> WHERE TICKET_PRICE >= (SELECT AVG(TICKET_PRICE) FROM TICKET);
++-----------+-------------+--------------+
+| TICKET_NO | TICKET_TYPE | TICKET_PRICE |
++-----------+-------------+--------------+
+|     11001 | Adult       |        24.99 |
+|     13002 | Adult       |        34.99 |
+|     67833 | Adult       |        28.67 |
+|     88567 | Child       |        22.50 |
+|     88568 | Adult       |        42.10 |
++-----------+-------------+--------------+
+5 rows in set (0.001 sec)
+
+
+
+SELECT DISTINCT EMP_NUM, EMP_LNAME, EMP_FNAME, PARK_NAME
+    -> FROM EMPLOYEE NATURAL JOIN HOURS NATURAL JOIN
+    -> ATTRACTION NATURAL JOIN THEMEPARK
+    -> WHERE PARK_CODE IN (SELECT THEMEPARK.PARK_CODE FROM
+    -> THEMEPARK WHERE PARK_NAME LIKE '%Fairy%');
++---------+------------+-----------+-----------+
+| EMP_NUM | EMP_LNAME  | EMP_FNAME | PARK_NAME |
++---------+------------+-----------+-----------+
+|     100 | Calderdale | Emma      | FairyLand |
+|     105 | Namowa     | Mirrelle  | FairyLand |
++---------+------------+-----------+-----------+
+2 rows in set (0.001 sec)
+
+
+ SELECT PARK_CODE, SUM(LINE_QTY)
+    -> FROM SALES_LINE NATURAL JOIN TICKET
+    -> GROUP BY PARK_CODE
+    -> HAVING SUM(LINE_QTY) > (SELECT AVG(LINE_QTY) FROM SALES_LINE);
++-----------+---------------+
+| PARK_CODE | SUM(LINE_QTY) |
++-----------+---------------+
+| FR1001    |            14 |
+| UK3452    |            29 |
+| ZA1342    |            18 |
++-----------+---------------+
+3 rows in set (0.001 sec)
+
+
+SELECT TICKET_NO, PARK_CODE, TICKET_PRICE FROM TICKET WHERE TICKET_PRICE > ALL(SELECT TICKET_PRICE FROM TICKET WHERE TICKET_TYPE = 'CHILD');
++-----------+-----------+--------------+
+| TICKET_NO | PARK_CODE | TICKET_PRICE |
++-----------+-----------+--------------+
+|     11001 | SP4533    |        24.99 |
+|     13002 | FR1001    |        34.99 |
+|     67833 | ZA1342    |        28.67 |
+|     88568 | UK3452    |        42.10 |
++-----------+-----------+--------------+
+4 rows in set (0.003 sec)
+
+
+ SELECT TICKET_NO, TICKET_PRICE, (SELECT AVG(TICKET_PRICE) FROM TICKET) AS AVGPRICE, TICKET_PRICE - (SELECT AVG(TICKET_PRICE) FROM TICKET) AS DIFF FROM TICKET;
++-----------+--------------+-----------+------------+
+| TICKET_NO | TICKET_PRICE | AVGPRICE  | DIFF       |
++-----------+--------------+-----------+------------+
+|     11001 |        24.99 | 21.740000 |   3.250000 |
+|     11002 |        14.99 | 21.740000 |  -6.750000 |
+|     11003 |        10.99 | 21.740000 | -10.750000 |
+|     13001 |        18.99 | 21.740000 |  -2.750000 |
+|     13002 |        34.99 | 21.740000 |  13.250000 |
+|     13003 |        20.99 | 21.740000 |  -0.750000 |
+|     67832 |        18.56 | 21.740000 |  -3.180000 |
+|     67833 |        28.67 | 21.740000 |   6.930000 |
+|     67855 |        12.12 | 21.740000 |  -9.620000 |
+|     88567 |        22.50 | 21.740000 |   0.760000 |
+|     88568 |        42.10 | 21.740000 |  20.360000 |
+|     89720 |        10.99 | 21.740000 | -10.750000 |
++-----------+--------------+-----------+------------+
+12 rows in set (0.004 sec)
+
+
+SELECT TRANSACTION_NO, LINE_NO, LINE_QTY, LINE_PRICE FROM SALES_LINE SL WHERE SL.LINE_QTY > (SELECT AVG(LINE_QTY) FROM SALES_LINE SA WHERE SA. TRANSACTION_NO = SL. TRANSACTION_NO);
++----------------+---------+----------+------------+
+| TRANSACTION_NO | LINE_NO | LINE_QTY | LINE_PRICE |
++----------------+---------+----------+------------+
+|          12781 |       1 |        2 |      69.98 |
+|          12785 |       3 |        4 |     139.96 |
+|          34534 |       1 |        4 |     168.40 |
+|          34537 |       1 |        2 |      84.20 |
+|          34540 |       1 |        4 |     168.40 |
++----------------+---------+----------+------------+
+5 rows in set (0.003 sec)

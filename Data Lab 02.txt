@@ -1,0 +1,48 @@
+MariaDB [p190068_usmanmanzoor]> INSERT INTO THEMEPARK VALUES('AU1001','SkiWorld','AU','UK');
+Query OK, 1 row affected (0.003 sec)
+
+MariaDB [p190068_usmanmanzoor]> INSERT INTO THEMEPARK VALUES('GR5001','RoboLand','GR','SP');
+Query OK, 1 row affected (0.003 sec)
+
+MariaDB [p190068_usmanmanzoor]> INSERT INTO Employee VALUES('2049','Mr','Usman','Manzoor','1990-12-20 ','2015-5-5','7253','502-4934','AU1001');
+Query OK, 1 row affected (0.003 sec)
+
+MariaDB [p190068_usmanmanzoor]> UPDATE THEMEPARK SET PARK_NAME = 'MiniLand' WHERE PARK_CODE = 'AU1001';
+Query OK, 0 rows affected (0.001 sec)
+Rows matched: 1  Changed: 0  Warnings: 0
+
+MariaDB [p190068_usmanmanzoor]> SELECT * FROM THEMEPARK;
++-----------+---------------+--------------+--------------+
+| PARK_CODE | PARK_NAME     | PARK_CITY    | PARK_COUNTRY |
++-----------+---------------+--------------+--------------+
+| AU1001    | MiniLand      | AU           | UK           |
+| FR1001    | FairyLand     | PARIS        | FR           |
+| GR5001    | RoboLand      | GR           | SP           |
+| NL1202    | Efling        | NOORD        | NL           |
+| SP4533    | AdventurePort | BARCELONA    | SP           |
+| SW2323    | Labyrinthe    | LAUSANNE     | SW           |
+| UK2622    | MiniLand      | WINDSOR      | UK           |
+| UK3452    | PleasureLand  | STOKE        | UK           |
+| UU0000    | WonderLand    | HARIPUR      | PK           |
+| ZA1342    | GoldTown      | JOHANNESBURG | ZA           |
++-----------+---------------+--------------+--------------+
+10 rows in set (0.001 sec)
+
+MariaDB [p190068_usmanmanzoor]> DELETE FROM THEMEPARK WHERE PARK_NAME = 'RoboLand';
+Query OK, 1 row affected (0.005 sec)
+
+MariaDB [p190068_usmanmanzoor]> SELECT * FROM THEMEPARK;
++-----------+---------------+--------------+--------------+
+| PARK_CODE | PARK_NAME     | PARK_CITY    | PARK_COUNTRY |
++-----------+---------------+--------------+--------------+
+| AU1001    | MiniLand      | AU           | UK           |
+| FR1001    | FairyLand     | PARIS        | FR           |
+| NL1202    | Efling        | NOORD        | NL           |
+| SP4533    | AdventurePort | BARCELONA    | SP           |
+| SW2323    | Labyrinthe    | LAUSANNE     | SW           |
+| UK2622    | MiniLand      | WINDSOR      | UK           |
+| UK3452    | PleasureLand  | STOKE        | UK           |
+| UU0000    | WonderLand    | HARIPUR      | PK           |
+| ZA1342    | GoldTown      | JOHANNESBURG | ZA           |
++-----------+---------------+--------------+--------------+
+9 rows in set (0.000 sec)

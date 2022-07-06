@@ -1,0 +1,98 @@
+create user 'usman'@'localhost' identified by'usman123';
+
+grant select on p190068_usmanmanzoor.themepark to 'usman'@'localhost';
+
+exit;
+
+mysql -u usman -p
+
+use p190068_usmanmanzoor;
+
+show databases;
++----------------------+
+| Database             |
++----------------------+
+| information_schema   |
+| p190068_usmanmanzoor |
+| test                 |
++----------------------+
+
+show tables;
++--------------------------------+
+| Tables_in_p190068_usmanmanzoor |
++--------------------------------+
+| themepark                      |
++--------------------------------+
+
+exit;
+
+ grant select on p190068_usmanmanzoor.empfr to 'usman'@'localhost';
+
+ grant select on p190068_usmanmanzoor.emp_detail to 'usman'@'localhost';
+
+exit;
+
+show databases
+    -> ;
++----------------------+
+| Database             |
++----------------------+
+| information_schema   |
+| p190068_usmanmanzoor |
+| test                 |
++----------------------+
+
+ select * from empfr;
++---------+-----------+------------+-----------+------------+---------------+---------------+-----------+-----------+
+| EMP_NUM | EMP_TITLE | EMP_LNAME  | EMP_FNAME | EMP_DOB    | EMP_HIRE_DATE | EMP_AREA_CODE | EMP_PHONE | PARK_CODE |
++---------+-----------+------------+-----------+------------+---------------+---------------+-----------+-----------+
+|     100 | Ms        | Calderdale | Emma      | 1972-06-15 | 1992-03-15    | 0181          | 324-9652  | FR1001    |
+|     102 | Mr        | Arshad     | Arif      | 1969-11-14 | 1990-12-20    | 7253          | 675-8993  | FR1001    |
+|     105 | Ms        | Namowa     | Mirrelle  | 1990-03-14 | 2006-11-08    | 0181          | 890-3243  | FR1001    |
++---------+-----------+------------+-----------+------------+---------------+---------------+-----------+-----------+
+
+select * from emp_detail;
++---------+-----------+--------------+------------+-----------+---------------+------------+
+| emp_num | park_code | park_name    | emp_lname  | emp_fname | emp_hire_date | emp_dob    |
++---------+-----------+--------------+------------+-----------+---------------+------------+
+|     100 | FR1001    | FairyLand    | Calderdale | Emma      | 1992-03-15    | 1972-06-15 |
+|     101 | UK3452    | PleasureLand | Ricardo    | Marshel   | 1996-04-25    | 1978-03-19 |
+|     102 | FR1001    | FairyLand    | Arshad     | Arif      | 1990-12-20    | 1969-11-14 |
+|     103 | UK3452    | PleasureLand | Roberts    | Anne      | 1994-08-16    | 1974-10-16 |
+|     104 | ZA1342    | GoldTown     | Denver     | Enrica    | 2001-10-20    | 1980-11-08 |
+|     105 | FR1001    | FairyLand    | Namowa     | Mirrelle  | 2006-11-08    | 1990-03-14 |
+|     106 | ZA1342    | GoldTown     | Smith      | Gemma     | 1989-01-05    | 1968-02-12 |
+|    2049 | AU1001    | MiniLand     | Usman      | Manzoor   | 2015-05-05    | 1990-12-20 |
++---------+-----------+--------------+------------+-----------+---------------+------------+
+
+ grant select on fb.* to 'usman'@'localhost';
+
+
+ grant All privileges on *.* to  'usman'@'localhost';
+
+ show databases;
++----------------------+
+| Database             |
++----------------------+
+| assignment           |
+| assignment_db        |
+| db_assignment        |
+| fb                   |
+| information_schema   |
+| mysql                |
+| p190068_usmanmanzoor |
+| performance_schema   |
+| phpmyadmin           |
+| sales_co             |
+| test                 |
+| univerity            |
++----------------------+
+
+ revoke select on p190068_usmanmanzoor.empfr from 'usman'@'localhost';
+
+ grant grant option p190068_usmanmanzoor.themepark to 'usman'@'localhost';
+
+
+
+
+
